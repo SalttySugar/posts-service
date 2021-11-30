@@ -3,17 +3,14 @@ package com.salttysugar.blog.posts.api.controller;
 import com.salttysugar.blog.posts.api.dto.PostDTO;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.service.PostService;
-import com.salttysugar.blog.posts.common.constant.API;
-import com.salttysugar.blog.posts.common.utils.ConversionUtils;
+import com.salttysugar.blog.posts.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping(value = API.V1.POST.BASE_URL)
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class PostsController {
     private final PostService service;
@@ -21,7 +18,7 @@ public class PostsController {
 
     @GetMapping
     public Flux<PostDTO> list() {
-        return service.list()
+        return service.findAll()
                 .map(converter.convert(PostDTO.class));
     }
 
@@ -30,29 +27,28 @@ public class PostsController {
     public Mono<PostDTO> create(@RequestBody PostDTO dto) {
         return Mono.just(dto)
                 .map(converter.convert(Post.class))
-                .flatMap(service::create)
+                .flatMap(service::save)
                 .map(converter.convert(PostDTO.class));
     }
 
     @GetMapping("/{id}")
     public Mono<PostDTO> retrieve(@PathVariable String id) {
-        return service.retrieve(id)
+        return service.findById(id)
                 .map(converter.convert(PostDTO.class));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        service.delete(id);
+    public Mono<Void> delete(@PathVariable String id) {
+        return service.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    public PostDTO update(@RequestBody PostDTO dto, @PathVariable String id) {
+    public Mono<PostDTO> update(@RequestBody PostDTO dto, @PathVariable String id) {
         dto.setId(id);
-        return Optional.of(dto)
+        return Mono.just(dto)
                 .map(converter.convert(Post.class))
-                .map(service::update)
-                .map(converter.convert(PostDTO.class))
-                .orElseThrow(RuntimeException::new);
+                .flatMap(service::save)
+                .map(converter.convert(PostDTO.class));
     }
 
 }

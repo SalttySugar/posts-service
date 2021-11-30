@@ -13,6 +13,9 @@ public final class PostToPostDTOConverter implements Converter<Post, PostDTO> {
                 .id(source.getId())
                 .content(source.getContent())
                 .title(source.getTitle())
+                .createdOn(source.getCreationTimestamp())
+                .updatedOn(source.getLastUpdateTimestamp())
+                .status(source.getPostStatus())
                 .build();
     }
 }

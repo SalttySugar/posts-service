@@ -1,4 +1,4 @@
-package com.salttysugar.blog.posts.common.utils;
+package com.salttysugar.blog.posts.utils;
 
 import java.util.Optional;
 import java.util.function.Consumer;

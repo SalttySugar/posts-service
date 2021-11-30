@@ -1,6 +1,4 @@
 spring:
   application:
     name: posts-service
-  config:
-    import: "optional:configserver:"
-  # Location of config server
+

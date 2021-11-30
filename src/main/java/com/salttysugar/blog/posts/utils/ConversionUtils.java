@@ -1,6 +1,5 @@
-package com.salttysugar.blog.posts.common.utils;
+package com.salttysugar.blog.posts.utils;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;

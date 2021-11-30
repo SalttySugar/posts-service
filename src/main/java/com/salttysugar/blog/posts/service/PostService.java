@@ -1,8 +1,14 @@
 package com.salttysugar.blog.posts.service;
 
+import com.salttysugar.blog.posts.api.dto.PostDTO;
 import com.salttysugar.blog.posts.model.Post;
-import com.salttysugar.blog.posts.common.ReactiveEntityService;
-import com.salttysugar.blog.posts.common.SearchableService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-public interface PostService extends ReactiveEntityService<Post, String>, SearchableService<Post, PostCriteria> {
+public interface PostService {
+    Mono<Post> findById(String id);
+    Flux<Post> findAll();
+    Flux<Post> findAll(PostCriteria criteria);
+    Mono<Post> save(Post post);
+    Mono<Void> deleteById(String id);
 }
