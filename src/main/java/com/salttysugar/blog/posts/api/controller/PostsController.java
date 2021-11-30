@@ -4,11 +4,13 @@ import com.salttysugar.blog.posts.api.dto.PostDTO;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.service.PostService;
 import com.salttysugar.blog.posts.utils.ConversionUtils;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Api(tags = "Posts")
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
