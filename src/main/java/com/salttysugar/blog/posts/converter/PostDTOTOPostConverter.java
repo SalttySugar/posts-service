@@ -1,6 +1,6 @@
 package com.salttysugar.blog.posts.converter;
 
-import com.salttysugar.blog.posts.api.dto.PostDTO;
+import com.salttysugar.blog.posts.api.dto.ResponsePostDTO;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.persistance.model.MongoPost;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Builder
 @AllArgsConstructor
-public final class PostDTOTOPostConverter implements Converter<PostDTO, Post> {
+public final class PostDTOTOPostConverter implements Converter<ResponsePostDTO, Post> {
     @Override
-    public Post convert(PostDTO source) {
+    public Post convert(ResponsePostDTO source) {
         return MongoPost.builder()
                 .id(source.getId())
                 .content(source.getContent())
@@ -21,6 +21,7 @@ public final class PostDTOTOPostConverter implements Converter<PostDTO, Post> {
                 .createdOn(source.getCreatedOn())
                 .updatedOn(source.getCreatedOn())
                 .status(source.getStatus())
+                .slug(source.getSlug())
                 .build();
     }
 }

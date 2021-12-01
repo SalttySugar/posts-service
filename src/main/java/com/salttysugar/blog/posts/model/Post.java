@@ -1,6 +1,7 @@
 package com.salttysugar.blog.posts.model;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.Map;
 
 public interface Post {
     String getId();
@@ -10,6 +11,10 @@ public interface Post {
     String getTitle();
 
     void setTitle(String title);
+
+    String getSlug();
+
+    void setSlug(String slug);
 
     String getContent();
 
@@ -27,5 +32,8 @@ public interface Post {
 
     void setLastUpdateTimestamp(Date timestamp);
 
+    Map<String, Object> getMeta();
+
+    void setMeta(Map<String, Object> meta);
 
 }

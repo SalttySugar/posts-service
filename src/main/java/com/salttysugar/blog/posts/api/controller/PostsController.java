@@ -1,6 +1,7 @@
 package com.salttysugar.blog.posts.api.controller;
 
-import com.salttysugar.blog.posts.api.dto.PostDTO;
+import com.salttysugar.blog.posts.api.dto.RequestPostDTO;
+import com.salttysugar.blog.posts.api.dto.ResponsePostDTO;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.service.PostService;
 import com.salttysugar.blog.posts.utils.ConversionUtils;
@@ -12,32 +13,31 @@ import reactor.core.publisher.Mono;
 
 @Api(tags = "Posts")
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/posts")
 @RequiredArgsConstructor
 public class PostsController {
     private final PostService service;
     private final ConversionUtils converter;
 
     @GetMapping
-    public Flux<PostDTO> list() {
+    public Flux<ResponsePostDTO> list() {
         return service.findAll()
-                .map(converter.convert(PostDTO.class));
+                .map(converter.convert(ResponsePostDTO.class));
     }
-
 
     @PostMapping
-    public Mono<PostDTO> create(@RequestBody PostDTO dto) {
+    public Mono<ResponsePostDTO> create(@RequestBody RequestPostDTO dto) {
         return Mono.just(dto)
-                .map(converter.convert(Post.class))
-                .flatMap(service::save)
-                .map(converter.convert(PostDTO.class));
+                .flatMap(service::create)
+                .map(converter.convert(ResponsePostDTO.class));
     }
 
-    @GetMapping("/{id}")
-    public Mono<PostDTO> retrieve(@PathVariable String id) {
-        return service.findById(id)
-                .map(converter.convert(PostDTO.class));
+    @GetMapping("/{identifier}")
+    public Mono<ResponsePostDTO> retrieve(@PathVariable String identifier) {
+        return service.findByIdentifier(identifier)
+                .map(converter.convert(ResponsePostDTO.class));
     }
+
 
     @DeleteMapping("/{id}")
     public Mono<Void> delete(@PathVariable String id) {
@@ -45,12 +45,10 @@ public class PostsController {
     }
 
     @PutMapping("/{id}")
-    public Mono<PostDTO> update(@RequestBody PostDTO dto, @PathVariable String id) {
-        dto.setId(id);
-        return Mono.just(dto)
-                .map(converter.convert(Post.class))
-                .flatMap(service::save)
-                .map(converter.convert(PostDTO.class));
+    public Mono<ResponsePostDTO> update(@RequestBody RequestPostDTO dto, @PathVariable String id) {
+        return service.update(id, dto)
+                .map(converter.convert(ResponsePostDTO.class));
+
     }
 
 }
