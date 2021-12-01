@@ -10,6 +10,9 @@ public interface Post {
 
     String getTitle();
 
+    String getThumbnailId();
+    void setThumbnailId(String thumbnailId);
+
     void setTitle(String title);
 
     String getSlug();

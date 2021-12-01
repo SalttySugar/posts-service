@@ -4,6 +4,7 @@ import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.model.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -16,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class MongoPost implements Post {
     @Id
     String id;
@@ -25,52 +27,12 @@ public class MongoPost implements Post {
     @Indexed(unique = true)
     String slug;
     PostStatus status;
+    String thumbnailId;
     Date createdOn;
     Date updatedOn;
     Date publishedOn;
     Map<String, Object> meta;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Override
-    public PostStatus getPostStatus() {
-        return status;
-    }
-
-    @Override
-    public void setPostStatus(PostStatus status) {
-        this.status = status;
-    }
 
     @Override
     public Date getCreationTimestamp() {
@@ -93,13 +55,13 @@ public class MongoPost implements Post {
     }
 
     @Override
-    public Map<String, Object> getMeta() {
-        return meta;
+    public PostStatus getPostStatus() {
+        return status;
     }
 
     @Override
-    public void setMeta(Map<String, Object> meta) {
-        this.meta = meta;
+    public void setPostStatus(PostStatus status) {
+        this.status = status;
     }
 
 }
