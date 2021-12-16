@@ -1,5 +1,6 @@
 package com.salttysugar.blog.posts.config;
 
+import com.salttysugar.blog.posts.constant.API;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ public class SpringfoxSwagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant(API.PATH + "/**"))
                 .build();
     }
 }

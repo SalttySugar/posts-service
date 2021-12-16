@@ -2,6 +2,7 @@ package com.salttysugar.blog.posts.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salttysugar.blog.posts.model.PostStatus;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ApiModel("Post")
 public final class PostDTO {
     String id;
     @JsonProperty(required = true)
