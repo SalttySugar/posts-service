@@ -4,7 +4,7 @@ spring:
   data:
     mongodb:
       host: localhost
-      password: test
+      password: root
       username: user
       database: admin
       port: 27017

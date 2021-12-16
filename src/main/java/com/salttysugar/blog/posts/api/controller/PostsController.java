@@ -8,16 +8,19 @@ import com.salttysugar.blog.posts.service.PostsService;
 import com.salttysugar.blog.posts.utils.ConversionUtils;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags = "Posts")
 @RestController
 @RequestMapping(API.PATH)
 @RequiredArgsConstructor
+@Validated
 public class PostsController {
     private final PostsService service;
     private final ConversionUtils converter;
@@ -29,7 +32,7 @@ public class PostsController {
     }
 
     @PostMapping
-    public Mono<PostDTO> create(@RequestBody RequestPostDTO dto) {
+    public Mono<PostDTO> create(@Valid @RequestBody RequestPostDTO dto) {
         return Mono.just(dto)
                 .flatMap(service::create)
                 .map(converter.convert(PostDTO.class));

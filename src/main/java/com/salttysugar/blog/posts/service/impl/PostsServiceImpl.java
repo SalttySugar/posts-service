@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -24,7 +26,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+
 public class PostsServiceImpl implements PostsService {
     private final PostsRepository repository;
     private final ApplicationEventPublisher publisher;
@@ -38,7 +40,6 @@ public class PostsServiceImpl implements PostsService {
                     .trim()
                     .toLowerCase(Locale.ROOT);
         }
-
 
 
         return Post.builder()
@@ -58,6 +59,11 @@ public class PostsServiceImpl implements PostsService {
                 .next()
                 .map(Post.class::cast)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(identifier)));
+    }
+
+    @Override
+    public Mono<Boolean> existsById(String id) {
+        return repository.existsById(id);
     }
 
     @Override
