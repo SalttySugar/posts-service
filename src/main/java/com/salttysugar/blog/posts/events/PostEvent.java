@@ -1,4 +1,4 @@
-package com.salttysugar.blog.posts.event;
+package com.salttysugar.blog.posts.events;
 
 import com.salttysugar.blog.posts.model.Post;
 import lombok.Getter;

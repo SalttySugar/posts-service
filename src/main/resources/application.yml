@@ -1,4 +1,11 @@
 spring:
   application:
     name: posts-service
+  data:
+    mongodb:
+      host: localhost
+      password: test
+      username: user
+      database: admin
+      port: 27017
 

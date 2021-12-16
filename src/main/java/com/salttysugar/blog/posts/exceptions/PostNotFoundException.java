@@ -1,4 +1,4 @@
-package com.salttysugar.blog.posts.exception;
+package com.salttysugar.blog.posts.exceptions;
 
 import org.springframework.http.HttpStatus;
 

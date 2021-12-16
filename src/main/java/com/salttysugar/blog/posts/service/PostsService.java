@@ -5,7 +5,7 @@ import com.salttysugar.blog.posts.model.Post;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface PostService {
+public interface PostsService {
     Mono<Post> create(RequestPostDTO dto);
 
     Mono<Post> update(String identifier, RequestPostDTO dto);

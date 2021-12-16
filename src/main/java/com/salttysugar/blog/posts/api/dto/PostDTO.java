@@ -1,5 +1,6 @@
 package com.salttysugar.blog.posts.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salttysugar.blog.posts.model.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -14,13 +16,19 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public final class ResponsePostDTO {
+public final class PostDTO {
     String id;
+    @JsonProperty(required = true)
     String title;
     String content;
     String slug;
+    @JsonProperty("thumbnail_id")
+    String thumbnailId;
     PostStatus status;
-    Date createdOn;
-    Date updatedOn;
-    Map<String, Object> meta;
+    @JsonProperty("created_at")
+    Date createdAt;
+    @JsonProperty("updated_at")
+    Date updatedAt;
+    @Builder.Default
+    Map<String, Object> meta = new HashMap<>();
 }
