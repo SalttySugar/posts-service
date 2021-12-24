@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class ApplicationConverter {
     ConversionService conversionService;
-
+    
     ApplicationConverter(@Qualifier("webFluxConversionService") ConversionService conversionService) {
         this.conversionService = conversionService;
     }
@@ -25,10 +25,4 @@ public class ApplicationConverter {
                 .orElseThrow(RuntimeException::new);
     }
 
-    public <T> Function<List<?>, List<T>> convertToListOf(Class<T> type) {
-        return (source) -> source
-                .stream()
-                .map(convert(type))
-                .collect(Collectors.toList());
-    }
 }

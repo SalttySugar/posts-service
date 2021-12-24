@@ -9,7 +9,6 @@ import com.salttysugar.blog.posts.exceptions.PostNotFoundException;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.model.PostStatus;
 import com.salttysugar.blog.posts.repository.PostsRepository;
-import com.salttysugar.blog.posts.service.PostCriteria;
 import com.salttysugar.blog.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,9 +18,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,32 +28,9 @@ public class PostsServiceImpl implements PostsService {
     private final PostsRepository repository;
     private final ApplicationEventPublisher publisher;
 
-    protected Post createPostFromDTO(CreatePostDTO dto) {
-        String slug = dto.getSlug();
-        Map<String, Object> meta = dto.getMeta();
-
-        if (slug == null) {
-            slug = dto.getTitle().replace(' ', '-')
-                    .trim()
-                    .toLowerCase(Locale.ROOT);
-        }
-
-
-        return Post.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
-                .slug(slug)
-                .meta(meta)
-                .authorId(dto.getAuthorId())
-                .thumbnailId(dto.getThumbnailId())
-                .status(dto.getStatus())
-                .build();
-    }
-
     @Override
-    public Mono<Post> findByIdentifier(String identifier) {
-        return this.repository.findPostBySlugOrId(identifier, identifier)
+    public Mono<Post> findByIdOrSlug(String identifier) {
+        return this.repository.findPostByIdOrSlug(identifier, identifier)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(identifier)));
     }
 
@@ -70,16 +45,30 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public Mono<Post> create(CreatePostDTO dto) {
-        return Mono.just(createPostFromDTO(dto))
+    public Mono<Post> create(CreatePostDTO postDTO) {
+        return Mono.just(postDTO)
+                .map(dto -> Post.builder()
+                        .title(dto.getTitle())
+                        .content(dto.getContent())
+                        .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                        .slug(Optional.of(postDTO.getSlug())
+                                .orElseGet(postDTO::getTitle)
+                                .trim()
+                                .replace(' ', '-')
+                                .toLowerCase(Locale.ROOT))
+                        .meta(dto.getMeta())
+                        .authorId(dto.getAuthorId())
+                        .thumbnailId(dto.getThumbnailId())
+                        .status(dto.getStatus())
+                        .build()
+                )
                 .flatMap(repository::save)
-                .map(Post.class::cast)
                 .doOnNext(post -> publisher.publishEvent(new PostCreatedEvent(post, this)));
     }
 
     @Override
     public Mono<Post> update(String identifier, UpdatePostDTO dto) {
-        return findByIdentifier(identifier)
+        return findByIdOrSlug(identifier)
                 .map(post -> {
                     post.setMeta(dto.getMeta());
                     post.setTitle(dto.getTitle());
@@ -94,14 +83,12 @@ public class PostsServiceImpl implements PostsService {
                     return post;
                 })
                 .flatMap(repository::save)
-                .map(Post.class::cast)
                 .doOnNext(post -> publisher.publishEvent(new PostUpdatedEvent(post, this)));
     }
 
     @Override
     public Mono<Post> findById(String id) {
         return repository.findById(id)
-                .map(Post.class::cast)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(id)));
     }
 
@@ -112,22 +99,14 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Flux<Post> findAll() {
-        return repository.findAll()
-                .map(Post.class::cast);
+        return repository.findAll();
     }
 
-    @Override
-    public Flux<Post> findAll(PostCriteria criteria) {
-        return repository.findAll()
-                .map(Post.class::cast);
-    }
 
     @Override
     public Mono<Post> save(Post post) {
         return Mono.just(post)
-                .map(Post.class::cast)
-                .flatMap(repository::save)
-                .map(Post.class::cast);
+                .flatMap(repository::save);
     }
 
     @Override

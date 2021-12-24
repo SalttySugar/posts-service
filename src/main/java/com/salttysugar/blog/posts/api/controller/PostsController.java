@@ -55,7 +55,7 @@ public class PostsController {
 
     @GetMapping("/{identifier}")
     public Mono<PostDTO> retrieve(@PathVariable String identifier) {
-        return service.findByIdentifier(identifier)
+        return service.findByIdOrSlug(identifier)
                 .map(converter.convert(PostDTO.class));
     }
 

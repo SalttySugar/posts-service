@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface PostsRepository extends ReactiveMongoRepository<Post, String> {
-    Mono<Post> findPostBySlugOrId(String slug, String id);
+    Mono<Post> findPostByIdOrSlug(String id, String slug);
 }

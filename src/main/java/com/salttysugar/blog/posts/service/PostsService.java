@@ -12,19 +12,18 @@ public interface PostsService {
 
     Mono<Post> update(String identifier, UpdatePostDTO dto);
 
-    Mono<Post> findById(String id) throws PostNotFoundException;
+    Mono<Post> findById(String id);
 
     Mono<Long> count();
 
     Flux<Post> findAll();
 
-    Flux<Post> findAll(PostCriteria criteria);
 
     Mono<Post> save(Post post);
 
     Mono<Void> deleteById(String id);
 
-    Mono<Post> findByIdentifier(String identifier);
+    Mono<Post> findByIdOrSlug(String identifier);
 
     Mono<Boolean> existsById(String id);
 
