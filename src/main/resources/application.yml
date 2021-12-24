@@ -1,7 +1,6 @@
 spring:
   application:
     name: posts-service
-
 management:
   endpoint:
     health:
