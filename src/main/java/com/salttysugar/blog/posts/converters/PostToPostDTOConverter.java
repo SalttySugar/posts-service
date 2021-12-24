@@ -21,6 +21,7 @@ public final class PostToPostDTOConverter implements Converter<Post, PostDTO> {
                 .status(source.getStatus())
                 .thumbnailId(source.getThumbnailId())
                 .authorId(source.getAuthorId())
+                .comments(source.getComments())
                 .build();
     }
 }

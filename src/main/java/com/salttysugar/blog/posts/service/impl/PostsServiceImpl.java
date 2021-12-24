@@ -76,6 +76,7 @@ public class PostsServiceImpl implements PostsService {
                     post.setContent(dto.getContent());
                     post.setThumbnailId(dto.getThumbnailId());
                     post.setStatus(dto.getStatus());
+                    post.setComments(dto.getComments());
                     post.setUpdatedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
                     if (post.getStatus() != PostStatus.PUBLISHED && dto.getStatus() == PostStatus.PUBLISHED) {
                         post.setPublishedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));

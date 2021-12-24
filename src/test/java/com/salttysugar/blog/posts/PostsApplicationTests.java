@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -183,7 +184,9 @@ class PostsApplicationTests extends BaseIntegrationTest {
                     .jsonPath("$.author_id").value(is(dto.getAuthorId()))
                     .jsonPath("$.thumbnail_id").value(is(dto.getThumbnailId()))
                     .jsonPath("$.status").value(is(dto.getStatus().toString()))
+                    .jsonPath("$.comments").exists()
                     .jsonPath("$.meta").value(is(dto.getMeta()));
+
         }
 
         @Test
@@ -200,6 +203,7 @@ class PostsApplicationTests extends BaseIntegrationTest {
                     .content("updated_content")
                     .slug("some-new-slug")
                     .thumbnailId("124")
+                    .comments(List.of("1", "23", "8"))
                     .status(PostStatus.PRIVATE)
                     .meta(new HashMap<>() {{
                         put("key_1", "value1");
@@ -223,6 +227,7 @@ class PostsApplicationTests extends BaseIntegrationTest {
                     .jsonPath("$.slug").value(equalTo(dto.getSlug()))
                     .jsonPath("$.thumbnail_id").value(is(dto.getThumbnailId()))
                     .jsonPath("$.status").value(is(dto.getStatus().toString()))
+                    .jsonPath("$.comments").value(is(dto.getComments()))
                     .jsonPath("$.meta").value(equalTo(dto.getMeta()));
         }
 

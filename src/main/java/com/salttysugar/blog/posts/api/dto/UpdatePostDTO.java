@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.query.Meta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -24,6 +26,8 @@ public final class UpdatePostDTO {
     @JsonProperty("thumbnail_id")
     String thumbnailId;
     PostStatus status;
+    @Builder.Default
+    List<String> comments = new ArrayList<>();
     Map<String, Object> meta = new HashMap<>();
 
 }

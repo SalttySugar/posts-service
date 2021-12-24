@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Data
@@ -36,6 +34,8 @@ public final class PostDTO {
     LocalDateTime updatedOn;
     @JsonProperty("published_on")
     LocalDateTime publishedOn;
+    @Builder.Default
+    List<String> comments = new ArrayList<>();
     @Builder.Default
     Map<String, Object> meta = new HashMap<>();
 }

@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Document
@@ -30,6 +32,8 @@ public class Post {
     PostStatus status;
     String thumbnailId;
     String authorId;
+    @Builder.Default
+    List<String> comments = new ArrayList<>();
     LocalDateTime createdOn;
     LocalDateTime updatedOn;
     LocalDateTime publishedOn;
