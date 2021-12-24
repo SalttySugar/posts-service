@@ -1,11 +1,9 @@
 spring:
   application:
     name: posts-service
-  data:
-    mongodb:
-      host: localhost
-      password: root
-      username: user
-      database: admin
-      port: 27017
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
