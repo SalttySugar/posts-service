@@ -10,10 +10,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class ConversionUtils {
+public class ApplicationConverter {
     ConversionService conversionService;
 
-    ConversionUtils(@Qualifier("webFluxConversionService") ConversionService conversionService) {
+    ApplicationConverter(@Qualifier("webFluxConversionService") ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 

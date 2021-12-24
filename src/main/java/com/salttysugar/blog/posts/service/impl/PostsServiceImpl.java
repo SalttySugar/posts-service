@@ -88,11 +88,9 @@ public class PostsServiceImpl implements PostsService {
                     post.setThumbnailId(dto.getThumbnailId());
                     post.setStatus(dto.getStatus());
                     post.setUpdatedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-
                     if (post.getStatus() != PostStatus.PUBLISHED && dto.getStatus() == PostStatus.PUBLISHED) {
                         post.setPublishedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
                     }
-
                     return post;
                 })
                 .flatMap(repository::save)

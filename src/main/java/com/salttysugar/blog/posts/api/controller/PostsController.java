@@ -7,7 +7,7 @@ import com.salttysugar.blog.posts.constant.API;
 import com.salttysugar.blog.posts.constant.Headers;
 import com.salttysugar.blog.posts.model.PostStatus;
 import com.salttysugar.blog.posts.service.PostsService;
-import com.salttysugar.blog.posts.utils.ConversionUtils;
+import com.salttysugar.blog.posts.utils.ApplicationConverter;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import java.util.List;
 @Validated
 public class PostsController {
     private final PostsService service;
-    private final ConversionUtils converter;
+    private final ApplicationConverter converter;
 
     @GetMapping
     public Mono<ResponseEntity<List<PostDTO>>> list(

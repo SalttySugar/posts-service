@@ -5,11 +5,10 @@ import com.salttysugar.blog.posts.api.dto.PostDTO;
 import com.salttysugar.blog.posts.api.dto.UpdatePostDTO;
 import com.salttysugar.blog.posts.constant.API;
 import com.salttysugar.blog.posts.constant.Headers;
-import com.salttysugar.blog.posts.exceptions.PostNotFoundException;
 import com.salttysugar.blog.posts.model.Post;
 import com.salttysugar.blog.posts.model.PostStatus;
 import com.salttysugar.blog.posts.service.PostsService;
-import com.salttysugar.blog.posts.utils.ConversionUtils;
+import com.salttysugar.blog.posts.utils.ApplicationConverter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -38,7 +36,7 @@ class PostsApplicationTests extends BaseIntegrationTest {
     private WebTestClient client;
 
     @Autowired
-    ConversionUtils converter;
+    ApplicationConverter converter;
     @Autowired
     PostsService postsService;
 

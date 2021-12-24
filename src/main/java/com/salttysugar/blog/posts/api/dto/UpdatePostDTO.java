@@ -17,7 +17,7 @@ import java.util.Map;
 @Builder
 @Data
 @ApiModel("Update post request")
-public class UpdatePostDTO {
+public final class UpdatePostDTO {
     String title;
     String slug;
     String content;
