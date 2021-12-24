@@ -1,6 +1,7 @@
 package com.salttysugar.blog.posts.service.impl;
 
-import com.salttysugar.blog.posts.api.dto.RequestPostDTO;
+import com.salttysugar.blog.posts.api.dto.CreatePostDTO;
+import com.salttysugar.blog.posts.api.dto.UpdatePostDTO;
 import com.salttysugar.blog.posts.events.PostCreatedEvent;
 import com.salttysugar.blog.posts.events.PostDeletedEvent;
 import com.salttysugar.blog.posts.events.PostUpdatedEvent;
@@ -11,16 +12,14 @@ import com.salttysugar.blog.posts.repository.PostsRepository;
 import com.salttysugar.blog.posts.service.PostCriteria;
 import com.salttysugar.blog.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class PostsServiceImpl implements PostsService {
     private final PostsRepository repository;
     private final ApplicationEventPublisher publisher;
 
-    protected Post createPostFromDTO(RequestPostDTO dto) {
+    protected Post createPostFromDTO(CreatePostDTO dto) {
         String slug = dto.getSlug();
         Map<String, Object> meta = dto.getMeta();
 
@@ -45,19 +44,18 @@ public class PostsServiceImpl implements PostsService {
         return Post.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .createdAt(Date.valueOf(LocalDate.now()))
+                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .slug(slug)
                 .meta(meta)
-                .status(PostStatus.PENDING)
+                .authorId(dto.getAuthorId())
+                .thumbnailId(dto.getThumbnailId())
+                .status(dto.getStatus())
                 .build();
     }
 
     @Override
     public Mono<Post> findByIdentifier(String identifier) {
-        return this.repository.findAll()
-                .filter(post -> post.getSlug().equals(identifier) || post.getId().equals(identifier))
-                .next()
-                .map(Post.class::cast)
+        return this.repository.findPostBySlugOrId(identifier, identifier)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(identifier)));
     }
 
@@ -67,7 +65,12 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public Mono<Post> create(RequestPostDTO dto) {
+    public Mono<Void> deleteAll() {
+        return repository.deleteAll();
+    }
+
+    @Override
+    public Mono<Post> create(CreatePostDTO dto) {
         return Mono.just(createPostFromDTO(dto))
                 .flatMap(repository::save)
                 .map(Post.class::cast)
@@ -75,15 +78,21 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public Mono<Post> update(String identifier, RequestPostDTO dto) {
+    public Mono<Post> update(String identifier, UpdatePostDTO dto) {
         return findByIdentifier(identifier)
                 .map(post -> {
-                    Post payload = createPostFromDTO(dto);
-                    post.setMeta(payload.getMeta());
-                    post.setTitle(payload.getTitle());
-                    post.setSlug(payload.getSlug());
-                    post.setContent(payload.getContent());
-                    post.setUpdatedAt(Date.valueOf(LocalDate.now()));
+                    post.setMeta(dto.getMeta());
+                    post.setTitle(dto.getTitle());
+                    post.setSlug(dto.getSlug());
+                    post.setContent(dto.getContent());
+                    post.setThumbnailId(dto.getThumbnailId());
+                    post.setStatus(dto.getStatus());
+                    post.setUpdatedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+
+                    if (post.getStatus() != PostStatus.PUBLISHED && dto.getStatus() == PostStatus.PUBLISHED) {
+                        post.setPublishedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+                    }
+
                     return post;
                 })
                 .flatMap(repository::save)
@@ -96,6 +105,11 @@ public class PostsServiceImpl implements PostsService {
         return repository.findById(id)
                 .map(Post.class::cast)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(id)));
+    }
+
+    @Override
+    public Mono<Long> count() {
+        return repository.count();
     }
 
     @Override

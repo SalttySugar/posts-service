@@ -6,7 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class PostToResponsePostDTOConverter implements Converter<Post, PostDTO> {
+public final class PostToPostDTOConverter implements Converter<Post, PostDTO> {
     @Override
     public PostDTO convert(Post source) {
         return PostDTO.builder()
@@ -14,11 +14,13 @@ public final class PostToResponsePostDTOConverter implements Converter<Post, Pos
                 .content(source.getContent())
                 .title(source.getTitle())
                 .slug(source.getSlug())
-                .createdAt(source.getCreatedAt())
-                .updatedAt(source.getUpdatedAt())
+                .createdOn(source.getCreatedOn())
+                .updatedOn(source.getUpdatedOn())
+                .publishedOn(source.getPublishedOn())
                 .meta(source.getMeta())
                 .status(source.getStatus())
                 .thumbnailId(source.getThumbnailId())
+                .authorId(source.getAuthorId())
                 .build();
     }
 }

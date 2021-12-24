@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -28,9 +29,10 @@ public class Post {
     String slug;
     PostStatus status;
     String thumbnailId;
-    Date createdAt;
-    Date updatedAt;
-    Date publishedOn;
+    String authorId;
+    LocalDateTime createdOn;
+    LocalDateTime updatedOn;
+    LocalDateTime publishedOn;
     Map<String, Object> meta;
 
 }

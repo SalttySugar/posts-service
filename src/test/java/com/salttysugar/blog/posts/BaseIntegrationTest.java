@@ -13,7 +13,7 @@ import org.testcontainers.utility.DockerImageName;
 @SpringBootTest
 @Testcontainers
 @ContextConfiguration(initializers = BaseIntegrationTest.Initializer.class)
-public class BaseIntegrationTest {
+public abstract class BaseIntegrationTest {
     @Container
     public static GenericContainer<?> mongoDbContainer = new GenericContainer<>(DockerImageName.parse("bitnami/mongodb"))
             .withEnv("MONGODB_ROOT_USER", "root")

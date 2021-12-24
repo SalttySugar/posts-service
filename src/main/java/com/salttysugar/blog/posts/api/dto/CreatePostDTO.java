@@ -2,6 +2,7 @@ package com.salttysugar.blog.posts.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.salttysugar.blog.posts.model.PostStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -15,12 +16,22 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 @Data
-@ApiModel("Create/Update post request")
-public final class RequestPostDTO {
-    @NotEmpty(message = "field \"title\" is required and cannot be blank")
+@ApiModel("Create post request")
+public final class CreatePostDTO {
+    @NotEmpty
     String title;
     String content;
     String slug;
+
+    @Builder.Default
+    PostStatus status = PostStatus.DRAFT;
+
+    @JsonProperty("author_id")
+    @NotEmpty
+    String authorId;
+
+    @JsonProperty("thumbnail_id")
+    String thumbnailId;
 
     @Builder.Default
     Map<String, Object> meta = new HashMap<>();

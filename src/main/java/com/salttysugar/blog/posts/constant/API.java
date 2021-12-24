@@ -1,6 +1,5 @@
 package com.salttysugar.blog.posts.constant;
 
-public final class API {
+public abstract class API {
     public static final String PATH = "/api/posts";
-
 }
