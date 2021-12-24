@@ -6,6 +6,10 @@
 
 * about
 * architecture
-* docker image
-    * env variables
-* helm chart
+* how to run
+  * docker image
+      * env variables
+  * docker-compose
+  * helm chart
+    * values
+  
