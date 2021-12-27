@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    kubernetes:
+      enabled: false
+      config:
+        enabled: false
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: polling
+

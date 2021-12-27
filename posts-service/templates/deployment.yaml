@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "posts-service.fullname" . }}
+  labels:
+  {{- include "posts-service.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+  {{- include "posts-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+    {{- include "posts-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "posts-service.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: spring.cloud.kubernetes.enabled
+              value: "{{ toString .Values.kubernetes.enabled }}"
+            - name: spring.cloud.kubernetes.config.enabled
+              value: "{{ toString .Values.kubernetes.config.enabled }}"
+            - name: spring.cloud.kubernetes.config.name
+              value: {{ toString .Values.kubernetes.config.name }}
+            - name: spring.cloud.kubernetes.config.namespace
+              value: "{{ toString .Values.kubernetes.config.namespace }}"
+{{/*            - name: spring.cloud.kubernetes.config.sources*/}}
+{{/*              value: "{{ toString .Values.kubernetes.config.sources }}"*/}}
+            - name: server.port
+              value: "{{ toString .Values.server.port }}"
+          ports:
+            - name: http
+              containerPort: {{ toYaml .Values.server.port}}
+              protocol: TCP
+{{/*          livenessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              path: /actuator/health/liveness*/}}
+{{/*              port: http*/}}
+{{/*          readinessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              path: /actuator/health/readiness*/}}
+{{/*              port: http*/}}
+          resources:
+      {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+  {{- toYaml . | nindent 8 }}
+  {{- end }}

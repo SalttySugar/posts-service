@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "posts-service.fullname" . }}
+  labels:
+  {{- include "posts-service.labels" . | nindent 4 }}
+rules:
+  - verbs: [ "*" ]
+    resources: [ "pods", "namespaces", "configmaps", "secrets" ]
+    apiGroups: [ "v1" , "apps/v1" ]

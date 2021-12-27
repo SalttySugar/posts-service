@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: posts-service
+build:
+  artifacts:
+    - image: posts-service
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  helm:
+    releases:
+      - name: posts-service
+        chartPath: ./posts-service
+        artifactOverrides:
+          image: posts-service
+        setValues:
+          image:
+            repository: posts-service
+        imageStrategy:
+          helm:  { }

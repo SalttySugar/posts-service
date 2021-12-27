@@ -27,7 +27,8 @@ public abstract class BaseIntegrationTest {
             TestPropertyValues.of(
                     "spring.data.mongodb.username=root",
                     "spring.data.mongodb.password=test",
-                    "spring.data.mongodb.port=" + mongoDbContainer.getMappedPort(27017)
+                    "spring.data.mongodb.port=" + mongoDbContainer.getMappedPort(27017),
+                    "spring.data.mongodb.database=admin"
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
