@@ -14,6 +14,16 @@ deploy:
         remoteChart: mongodb
         version: 10.30.8
         repo: https://charts.bitnami.com/bitnami
+        wait: true
+        setValues:
+          persistence:
+            enabled: true
+          auth:
+            enabled: true
+            username: "admin"
+            rootPassword: "q12345678"
+            password: "q12345678"
+            database: "admin"
         imageStrategy:
           helm: { }
       - name: posts-service
@@ -21,8 +31,13 @@ deploy:
         artifactOverrides:
           image: posts-service
         setValues:
-          kubernetes:
-            config:
-              name: posts-service-config-map
+          service:
+            type: NodePort
+          mongodb:
+            port: 27017
+            host: posts-service-mongodb
+            username: root
+            password: "q12345678"
+            name: admin
         imageStrategy:
           helm: { }

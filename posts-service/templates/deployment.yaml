@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "posts-service.serviceAccountName" . }}
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -34,34 +33,32 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: spring.cloud.kubernetes.enabled
-              value: "{{ toString .Values.kubernetes.enabled }}"
-            - name: spring.cloud.kubernetes.config.enabled
-              value: "{{ toString .Values.kubernetes.config.enabled }}"
-            - name: spring.cloud.kubernetes.config.name
-              value: {{ toString .Values.kubernetes.config.name }}
-            - name: spring.cloud.kubernetes.config.namespace
-              value: "{{ toString .Values.kubernetes.config.namespace }}"
-            - name: spring.cloud.kubernetes.secrets.enabled
-              value: "true"
-            - name: spring.cloud.kubernetes.secrets.name
-              value: "posts-service-mongodb"
-{{/*            - name: spring.cloud.kubernetes.config.sources*/}}
-{{/*              value: "{{ toString .Values.kubernetes.config.sources }}"*/}}
+            - name: application.name
+              value: "{{ toString .Values.application.name}}"
             - name: server.port
-              value: "{{ toString .Values.server.port }}"
+              value: "{{ toString .Values.server.port}}"
+            - name: spring.data.mongodb.port
+              value: "{{ toString .Values.mongodb.port}}"
+            - name: spring.data.mongodb.host
+              value: "{{ toString .Values.mongodb.host}}"
+            - name: spring.data.mongodb.username
+              value: "{{ toString .Values.mongodb.username}}"
+            - name: spring.data.mongodb.password
+              value: "{{ toString .Values.mongodb.password}}"
+            - name: spring.data.mongodb.database
+              value: "{{ toString .Values.mongodb.name}}"
           ports:
             - name: http
               containerPort: {{ toYaml .Values.server.port}}
               protocol: TCP
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /actuator/health/liveness*/}}
-{{/*              port: http*/}}
-{{/*          readinessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /actuator/health/readiness*/}}
-{{/*              port: http*/}}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
           resources:
       {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -4,17 +4,12 @@
 
 A Helm chart for Kubernetes
 
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | mongodb | 10.30.9 |
-
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
+| application.name | string | `"posts-service"` |  |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
@@ -24,18 +19,11 @@ A Helm chart for Kubernetes
 | image.repository | string | `"pilipchukbogdan90/posts-service"` |  |
 | image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.className | string | `""` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
-| ingress.tls | list | `[]` |  |
-| kubernetes.config.enabled | bool | `true` |  |
-| kubernetes.config.name | string | `" "` |  |
-| kubernetes.config.namespace | string | `" "` |  |
-| kubernetes.config.sources | list | `[]` |  |
-| kubernetes.enabled | bool | `true` |  |
+| mongodb.host | string | `""` |  |
+| mongodb.name | string | `""` |  |
+| mongodb.password | string | `""` |  |
+| mongodb.port | int | `27017` |  |
+| mongodb.username | string | `""` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
@@ -46,9 +34,6 @@ A Helm chart for Kubernetes
 | server.port | int | `80` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
-| serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.create | bool | `true` |  |
-| serviceAccount.name | string | `""` |  |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
