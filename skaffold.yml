@@ -10,12 +10,19 @@ build:
 deploy:
   helm:
     releases:
+      - name: posts-service-mongodb
+        remoteChart: mongodb
+        version: 10.30.8
+        repo: https://charts.bitnami.com/bitnami
+        imageStrategy:
+          helm: { }
       - name: posts-service
         chartPath: ./posts-service
         artifactOverrides:
           image: posts-service
         setValues:
-          image:
-            repository: posts-service
+          kubernetes:
+            config:
+              name: posts-service-config-map
         imageStrategy:
-          helm:  { }
+          helm: { }

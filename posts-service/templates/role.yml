@@ -5,6 +5,6 @@ metadata:
   labels:
   {{- include "posts-service.labels" . | nindent 4 }}
 rules:
-  - verbs: [ "*" ]
-    resources: [ "pods", "namespaces", "configmaps", "secrets" ]
-    apiGroups: [ "v1" , "apps/v1" ]
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["pods","configmaps"]
+    verbs: ["get", "watch", "list"]

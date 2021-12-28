@@ -42,6 +42,10 @@ spec:
               value: {{ toString .Values.kubernetes.config.name }}
             - name: spring.cloud.kubernetes.config.namespace
               value: "{{ toString .Values.kubernetes.config.namespace }}"
+            - name: spring.cloud.kubernetes.secrets.enabled
+              value: "true"
+            - name: spring.cloud.kubernetes.secrets.name
+              value: "posts-service-mongodb"
 {{/*            - name: spring.cloud.kubernetes.config.sources*/}}
 {{/*              value: "{{ toString .Values.kubernetes.config.sources }}"*/}}
             - name: server.port

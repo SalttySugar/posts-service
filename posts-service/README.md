@@ -4,6 +4,12 @@
 
 A Helm chart for Kubernetes
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://charts.bitnami.com/bitnami | mongodb | 10.30.9 |
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -16,7 +22,7 @@ A Helm chart for Kubernetes
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"pilipchukbogdan90/posts-service"` |  |
-| image.tag | string | `""` |  |
+| image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.className | string | `""` |  |
@@ -37,6 +43,7 @@ A Helm chart for Kubernetes
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
+| server.port | int | `80` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |

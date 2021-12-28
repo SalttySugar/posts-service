@@ -6,8 +6,8 @@ metadata:
     {{- include "posts-service.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: post-service.name
+    name: {{ include "posts-service.fullname" . }}
 roleRef:
-  apiGroup: "rbac.authorization.k8s.io"
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: post-service.roleName
+  name: {{ include "posts-service.fullname" . }}
