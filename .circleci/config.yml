@@ -1,24 +1,10 @@
-version: 2.1
-
-orbs:
-  maven: circleci/maven@1.0.1
-executors:
-  docker:
-    docker:
-      - image: circleci/openjdk:14-jdk-buster
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
 machine: true
 jobs:
   build:
-    executor: docker
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - maven/with_cache:
-          steps:
-            - run: mvn -q test verify -Pcoverage
-      - maven/process_test_results
-workflows:
-  build:
-    jobs:
-      - build
+
+      - run: mvn -B clean install
