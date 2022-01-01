@@ -11,7 +11,7 @@ jobs:
 
       - maven/with_cache:
           steps:
-            - run: mvn -q test verify -Pcoverage
+            - run: mvn clean -q test -x
       - maven/process_test_results
 workflows:
   build:
