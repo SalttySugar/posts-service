@@ -38,8 +38,12 @@ jobs:
           steps:
             - run: mvn package -DskipTests
       - run: docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
-      - run: docker build --tag salttysugar/posts-service:$TAG .
-      - run: docker push salttysugar/posts-service:$TAG
+      # - run: docker build --tag salttysugar/posts-service:$TAG .
+      # - run: docker push salttysugar/posts-service:$TAG
+      - run: docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
+      - run: docker push salttysugar/posts-service:$CIRCLE_BRANCH
+    requires:
+      - test
 workflows:
   default:
     jobs:
