@@ -32,7 +32,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @RecordApplicationEvents
-class PostsApplicationTests extends BaseIntegrationTest {
+class PostsApplicationTests  {
     @Autowired
     private WebTestClient client;
 

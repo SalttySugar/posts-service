@@ -2,20 +2,23 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@1.0.1
+executors:
+  docker-mongo:
+    docker:
+      - image: circleci/openjdk:14-jdk-buster
+      - image: bitnami/mongodb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "secret"
+      spring.data.mongodb.username: root
+      spring.data.mongodb.password: "secret"
+      spring.data.mongodb.database: "admin"
+
 jobs:
   build:
-    machine:
-      image: ubuntu-1604:202007-01
-      docker_layer_caching: true
+    executor: docker-mongo
+    resource_class: small
     steps:
       - checkout
-      - run:
-          name: Install OpenJDK 11
-          command: |
-            sudo apt-get update && sudo apt-get install openjdk-11-jdk
-            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/java-11-openjdk-amd64/bin/javac
-            java -version
       - maven/with_cache:
           steps:
             - run: mvn -q test verify -Pcoverage
