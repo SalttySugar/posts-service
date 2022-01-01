@@ -12,10 +12,7 @@ jobs:
     executor: machine
     steps:
       - checkout
-      - maven/with_cache:
-          steps:
-            - run: mvn -q test verify -Pcoverage
-      - maven/process_test_results
+      - run: mvn -q test verify -Pcoverage
 workflows:
   build:
     jobs:
