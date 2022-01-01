@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   maven: circleci/maven@1.0.1
 executors:
-  docker-mongo:
+  maven-mongodb:
     docker:
       - image: circleci/openjdk:14-jdk-buster
       - image: bitnami/mongodb:latest
@@ -12,10 +12,17 @@ executors:
       spring.data.mongodb.username: root
       spring.data.mongodb.password: "secret"
       spring.data.mongodb.database: "admin"
+  docker-maven:
+    docker:
+      - image: circleci/openjdk:14-jdk-buster
+      - image: docker:17.05.0-ce-git
+    auth:
+      username: salttysugar
+      password: $DOCKERHUB_TOKEN
 
 jobs:
-  build:
-    executor: docker-mongo
+  test:
+    executor: maven-mongodb
     resource_class: small
     steps:
       - checkout
@@ -23,6 +30,18 @@ jobs:
           steps:
             - run: mvn -q test verify -Pcoverage
       - maven/process_test_results
+  build:
+    executor: maven-mongodb
+    resource_class: small
+    environment:
+      TAG: << pipeline.git.tag >>
+    steps:
+      - checkout
+      - maven/with_cache:
+          steps:
+            - run: mvn package -DskipTests
+      - run: docker build --tag salttysugar/posts-service:$TAG .
+      - run: docker push salttysugar/posts-service:$TAG
 workflows:
   build:
     jobs:
