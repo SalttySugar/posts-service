@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@1.0.1
-  codecov: codecov/codecov@1.1.0
 executors:
   docker-mongo:
     docker:
@@ -17,8 +16,6 @@ jobs:
           steps:
             - run: mvn -q test verify -Pcoverage
       - maven/process_test_results
-      - codecov/upload:
-          when: on_success
 workflows:
   build:
     jobs:
