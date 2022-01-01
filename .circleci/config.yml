@@ -9,7 +9,6 @@ version: 2.1
 machine: true
 jobs:
   build:
-    executor: machine
     steps:
       - checkout
       - run: mvn -q test verify -Pcoverage
