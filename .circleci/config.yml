@@ -37,7 +37,14 @@ jobs:
       - maven/with_cache:
           steps:
             - run: mvn package -DskipTests
-      - run: docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: true
+      - run: |
+          docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
+          docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
+          docker push salttysugar/posts-service:$CIRCLE_BRANCH
+
       # - run: docker build --tag salttysugar/posts-service:$TAG .
       # - run: docker push salttysugar/posts-service:$TAG
       - run: docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
