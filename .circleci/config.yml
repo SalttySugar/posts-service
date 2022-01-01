@@ -16,9 +16,6 @@ executors:
     docker:
       - image: circleci/openjdk:14-jdk-buster
       - image: docker:17.05.0-ce-git
-    auth:
-      username: salttysugar
-      password: $DOCKERHUB_TOKEN
 
 jobs:
   test:
@@ -40,6 +37,7 @@ jobs:
       - maven/with_cache:
           steps:
             - run: mvn package -DskipTests
+      - run: docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
       - run: docker build --tag salttysugar/posts-service:$TAG .
       - run: docker push salttysugar/posts-service:$TAG
 workflows:
