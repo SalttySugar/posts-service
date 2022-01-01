@@ -5,13 +5,12 @@ orbs:
 jobs:
   build:
     machine: true
-    resource_class: small
     steps:
       - checkout
 
       - maven/with_cache:
           steps:
-            - run: mvn clean -q test -x
+            - run: mvn -q test verify -Pcoverage
       - maven/process_test_results
 workflows:
   build:
