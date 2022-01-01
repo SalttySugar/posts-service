@@ -1,19 +1,17 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@1.0.1
-executors:
-  docker:
-    docker:
-      - image: circleci/openjdk:14-jdk-buster
+# orbs:
+#   maven: circleci/maven@1.0.1
+# executors:
+#   docker:
+#     docker:
+#       - image: circleci/openjdk:14-jdk-buster
+machine: true
 jobs:
   build:
-    executor: docker
+    executor: machine
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
       - maven/with_cache:
           steps:
             - run: mvn -q test verify -Pcoverage
