@@ -41,6 +41,7 @@ jobs:
       - run: docker build --tag salttysugar/posts-service:$TAG .
       - run: docker push salttysugar/posts-service:$TAG
 workflows:
-  build:
+  default:
     jobs:
+      - test
       - build
