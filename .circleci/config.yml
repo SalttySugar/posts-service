@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   maven: circleci/maven@1.0.1
 executors:
-  docker-mongo:
+  docker:
     docker:
       - image: circleci/openjdk:14-jdk-buster
 jobs:
