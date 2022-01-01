@@ -42,10 +42,11 @@ jobs:
       # - run: docker push salttysugar/posts-service:$TAG
       - run: docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
       - run: docker push salttysugar/posts-service:$CIRCLE_BRANCH
-    requires:
-      - test
+
 workflows:
   default:
     jobs:
       - test
-      - build
+      - build:
+          requires:
+            - test
