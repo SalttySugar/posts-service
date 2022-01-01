@@ -31,7 +31,7 @@ jobs:
             - run: mvn -q test verify -Pcoverage
       - maven/process_test_results
   build:
-    executor: maven-mongodb
+    executor: docker-mongodb
     resource_class: small
     environment:
       TAG: << pipeline.git.tag >>
