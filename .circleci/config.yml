@@ -5,6 +5,7 @@ orbs:
 jobs:
   build:
     machine: true
+    resource_class: small
     steps:
       - checkout
 
