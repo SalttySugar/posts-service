@@ -19,12 +19,19 @@ executors:
 jobs:
   test-and-package:
     executor: maven-mongodb
-    resource_class: medium
+    resource_class: small
     steps:
       - checkout
       - maven/with_cache:
           steps:
             - run: mvn package
+      - run: |
+          echo =======
+          ls ./
+          echo =======
+          echo =======
+          ls ./target
+          echo =======
       - persist_to_workspace:
           root: .
           paths:
