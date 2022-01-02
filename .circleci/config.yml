@@ -28,7 +28,7 @@ jobs:
       - persist_to_workspace:
           root: working_directory
           paths:
-            - "/target"
+            - "./target"
       - maven/process_test_results
   push-to-dockerhub:
     resource_class: small
