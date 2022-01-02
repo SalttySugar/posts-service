@@ -16,16 +16,13 @@ executors:
 jobs:
   test:
     executor: maven-mongodb
-    resource_class: small
+    resource_class: medium
     steps:
       - checkout
       - maven/with_cache:
           steps:
-            - run: mvn -T 2 clean install
-      - persist_to_workspace:
-          root: .
-          paths:
-            - "./target"
+            - run: mvn -T 6 clean install
+
       - maven/process_test_results
 
 workflows:
