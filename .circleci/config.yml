@@ -24,7 +24,7 @@ jobs:
       - checkout
       - maven/with_cache:
           steps:
-            - run: mvn -q test verify package -Pcoverage
+            - run: mvn package
       - persist_to_workspace:
           root: .
           paths:
