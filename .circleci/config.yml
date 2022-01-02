@@ -12,6 +12,8 @@ executors:
       spring.data.mongodb.username: root
       spring.data.mongodb.password: "secret"
       spring.data.mongodb.database: "admin"
+      junit.jupiter.execution.parallel.enabled: "true"
+      junit.jupiter.execution.parallel.mode.default: concurrent
 
 jobs:
   test-and-package:
