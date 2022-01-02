@@ -1,0 +1,30 @@
+version: 2.1
+
+orbs:
+  maven: circleci/maven@1.0.1
+executors:
+  maven-mongodb:
+    docker:
+      - image: circleci/openjdk:14-jdk-buster
+      - image: bitnami/mongodb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "secret"
+      spring.data.mongodb.username: root
+      spring.data.mongodb.password: "secret"
+      spring.data.mongodb.database: "admin"
+
+jobs:
+  test:
+    executor: maven-mongodb
+    resource_class: small
+    steps:
+      - checkout
+      - maven/with_cache:
+          steps:
+            - run: mvn -T 6 clean install
+      - maven/process_test_results
+
+workflows:
+  default:
+    jobs:
+      - test
