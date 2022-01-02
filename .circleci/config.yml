@@ -12,9 +12,6 @@ executors:
       spring.data.mongodb.username: root
       spring.data.mongodb.password: "secret"
       spring.data.mongodb.database: "admin"
-  docker-maven:
-    docker:
-      - image: circleci/openjdk:14-jdk-buster
 
 jobs:
   test-and-package:
@@ -25,13 +22,6 @@ jobs:
       - maven/with_cache:
           steps:
             - run: mvn package
-      - run: |
-          echo =======
-          ls ./
-          echo =======
-          echo =======
-          ls ./target
-          echo =======
       - persist_to_workspace:
           root: .
           paths:
@@ -39,8 +29,7 @@ jobs:
       - maven/process_test_results
   push-to-dockerhub:
     resource_class: small
-    docker:
-      - image: docker:17.05.0-ce-git
+    executor: maven-mongodb
     environment:
       TAG: << pipeline.git.tag >>
     steps:
@@ -53,10 +42,6 @@ jobs:
       - run:
           name: "build image and push it to dockerhub"
           command: |
-            ls ./target
-            echo "======="
-            ls ./target/
-            echo "======="
             docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
             docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
             docker push salttysugar/posts-service:$CIRCLE_BRANCH
