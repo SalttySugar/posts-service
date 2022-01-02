@@ -26,7 +26,7 @@ jobs:
           steps:
             - run: mvn -q test verify package -Pcoverage
       - persist_to_workspace:
-          root: working_directory
+          root: .
           paths:
             - "./target"
       - maven/process_test_results
