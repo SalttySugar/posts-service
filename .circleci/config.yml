@@ -31,11 +31,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - test-and-package
-      - push-to-dockerhub:
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - test-and-package
+      - test
