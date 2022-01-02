@@ -15,45 +15,42 @@ executors:
   docker-maven:
     docker:
       - image: circleci/openjdk:14-jdk-buster
-      - image: docker:17.05.0-ce-git
 
 jobs:
-  test:
+  test-and-package:
     executor: maven-mongodb
     resource_class: small
     steps:
       - checkout
       - maven/with_cache:
           steps:
-            - run: mvn -q test verify -Pcoverage
+            - run: mvn -q test verify package -Pcoverage
       - maven/process_test_results
-  build:
+  push-to-dockerhub:
     executor: docker-maven
     resource_class: small
     environment:
       TAG: << pipeline.git.tag >>
     steps:
       - checkout
-      - maven/with_cache:
-          steps:
-            - run: mvn package -DskipTests
       - setup_remote_docker:
           version: 19.03.13
           docker_layer_caching: true
-      - run: |
-          docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
-          docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
-          docker push salttysugar/posts-service:$CIRCLE_BRANCH
-
-      # - run: docker build --tag salttysugar/posts-service:$TAG .
-      # - run: docker push salttysugar/posts-service:$TAG
-      - run: docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
-      - run: docker push salttysugar/posts-service:$CIRCLE_BRANCH
+      - run:
+          name: "build image and push it to dockerhub"
+          command: |
+            docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
+            docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
+            docker push salttysugar/posts-service:$CIRCLE_BRANCH
 
 workflows:
   default:
     jobs:
-      - test
-      - build:
+      - test-and-package
+      - push-to-dockerhub:
+          # when:
+          #   condition:
+          #     or:
+          #       - equal: [master, << pipeline.git.branch >>]
           requires:
-            - test
+            - test-and-package
