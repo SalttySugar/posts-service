@@ -16,12 +16,12 @@ executors:
 jobs:
   test-and-package:
     executor: maven-mongodb
-    resource_class: xlarge
+    resource_class: small
     steps:
       - checkout
       - maven/with_cache:
           steps:
-            - run: mvn -T 12 install
+            - run: mvn -T 2 install
       - persist_to_workspace:
           root: .
           paths:
