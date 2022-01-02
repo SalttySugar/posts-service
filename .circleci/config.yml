@@ -19,7 +19,7 @@ executors:
 jobs:
   test-and-package:
     executor: maven-mongodb
-    resource_class: small
+    resource_class: medium
     steps:
       - checkout
       - maven/with_cache:
@@ -46,6 +46,8 @@ jobs:
       - run:
           name: "build image and push it to dockerhub"
           command: |
+            ls 
+            ls ./target
             docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
             docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
             docker push salttysugar/posts-service:$CIRCLE_BRANCH
