@@ -14,37 +14,19 @@ executors:
       spring.data.mongodb.database: "admin"
 
 jobs:
-  test-and-package:
+  test:
     executor: maven-mongodb
     resource_class: small
     steps:
       - checkout
-      - maven/with_cache:
+      - maven:
           steps:
-            - run: mvn -T 2 install
+            - run: mvn -T 2 clean install
       - persist_to_workspace:
           root: .
           paths:
             - "./target"
       - maven/process_test_results
-  push-to-dockerhub:
-    resource_class: small
-    executor: maven-mongodb
-    environment:
-      TAG: << pipeline.git.tag >>
-    steps:
-      - checkout
-      - attach_workspace:
-          at: "./"
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
-      - run:
-          name: "build image and push it to dockerhub"
-          command: |
-            docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
-            docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
-            docker push salttysugar/posts-service:$CIRCLE_BRANCH
 
 workflows:
   default:
