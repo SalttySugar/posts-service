@@ -46,8 +46,10 @@ jobs:
       - run:
           name: "build image and push it to dockerhub"
           command: |
-            ls 
             ls ./target
+            echo "======="
+            ls ./target/
+            echo "======="
             docker login --username=salttysugar --password=$DOCKERHUB_TOKEN
             docker build --tag salttysugar/posts-service:$CIRCLE_BRANCH .
             docker push salttysugar/posts-service:$CIRCLE_BRANCH
