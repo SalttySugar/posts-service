@@ -19,7 +19,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - maven:
+      - maven/with_cache:
           steps:
             - run: mvn -T 2 clean install
       - persist_to_workspace:
