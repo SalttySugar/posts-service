@@ -16,7 +16,7 @@ executors:
 jobs:
   test:
     executor: maven-mongodb
-    resource_class: medium
+    resource_class: medium+
     steps:
       - checkout
       - maven/with_cache:
