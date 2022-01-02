@@ -51,9 +51,9 @@ workflows:
     jobs:
       - test-and-package
       - push-to-dockerhub:
-          when:
-            condition:
-              or:
-                - equal: [master, << pipeline.git.branch >>]
+          filters:
+            branches:
+              only:
+                - main
           requires:
             - test-and-package
