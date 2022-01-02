@@ -16,7 +16,7 @@ executors:
 jobs:
   test-and-package:
     executor: maven-mongodb
-    resource_class: medium
+    resource_class: xlarge
     steps:
       - checkout
       - maven/with_cache:
